@@ -18,7 +18,7 @@ import java.util.Scanner;
       }
 
       public static void abrirSettings() {
-          System.out.println("Entering our settings...");
+          System.out.println("Entering our settings, wait...");
 
       }
 
