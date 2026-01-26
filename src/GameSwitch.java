@@ -2,7 +2,15 @@ import java.util.Scanner;
 
   public class GameSwitch {
 
-      public static int lerOpcao(Scanner pedido) {
+      public static void mostrarMenu(){
+          System.out.println("Welcome to our program, where do you want to go?");
+          System.out.println("1 - Open Game");
+          System.out.println("2 - Open Settings");
+          System.out.println("3 - Help");
+          System.out.println("4 - Exit");
+      }
+
+      public static int lerEscolhaDoUsuario(Scanner pedido) {
           int opcao;
 
           while (true) {
@@ -26,15 +34,22 @@ import java.util.Scanner;
           System.out.println("Entering our help space...");
       }
 
-      public static void abrirGames(Scanner pedido) {
-
-          int game;
+      public static void menuGames(){
 
           System.out.println("Entering our games space...");
           System.out.println("----- GAMES -----");
           System.out.println("1 - Cont Numbers");
           System.out.println("2 - Sum numbers");
-          System.out.println("3 - Rerturn to menu");
+          System.out.println("3 - Odd or even");
+          System.out.println("4 - Rerturn to menu");
+
+      }
+
+      public static void abrirGames(Scanner pedido) {
+
+          int game;
+
+          menuGames();
 
           game = pedido.nextInt();
 
@@ -77,11 +92,30 @@ import java.util.Scanner;
               System.out.println("Finishe ! The result: " + resultado );
 
           } else if (game == 3){
+              jogoParOuImpar(pedido);
+
+          } else if (game == 4) {
               System.out.println("Returning...");
               return;
           }
       }
 
+      public static void jogoParOuImpar(Scanner pedido){
+
+          int escolha;
+
+          System.out.println("Escolha seu numero: ");
+          escolha = pedido.nextInt();
+
+          if (escolha % 2 == 0) {
+              System.out.println("O numero " + escolha + " é par");
+
+
+          } else {
+              System.out.println("O numero " + escolha + " é Impar");
+          }
+
+      }
 
       public static void mostrarBoasVindas(){
 
@@ -91,46 +125,47 @@ import java.util.Scanner;
 
       public static void exitGame(){
           System.out.println("Exiting...");
+          System.exit(0);
       }
 
+      public static void executarOpcao(int opcao, Scanner pedido){
+
+          switch (opcao){
+
+              case 1:
+                  abrirGames(pedido);
+                  break;
+
+              case 2:
+
+                  abrirSettings();
+                  break;
+
+              case 3:
+                  abrirHelp();
+                  break;
+
+              case 4:
+                  exitGame();
+                  break;
+
+              default:
+                  System.out.println("This option don't exist");
+          }
+      }
+
+
       public static void main(String[] args) {
+          Scanner pedido = new Scanner(System.in);
 
           mostrarBoasVindas();
 
-            Scanner pedido = new Scanner(System.in);
-            int select;
+          while(true){
+              mostrarMenu();
 
-            while (true) {
+              int select = lerEscolhaDoUsuario(pedido);
+              executarOpcao(select, pedido);
 
-                System.out.println("Welcome to our program, where do you want to go?");
-                System.out.println("1 - Open Game");
-                System.out.println("2 - Open Settings");
-                System.out.println("3 - Help");
-                System.out.println("4 - Exit");
-
-                select = lerOpcao(pedido);
-
-                switch (select) {
-
-                    case 1:
-                        abrirGames(pedido);
-                            break;
-
-                    case 2:
-                        abrirSettings();
-                            break;
-
-                    case 3:
-                        abrirHelp();
-                            break;
-
-                    case 4:
-                        exitGame();
-                        return;
-
-                    default:
-                        System.out.println("Invalid Option");
-                }
-            }
-        }
-    }
+          }
+      }
+  }
