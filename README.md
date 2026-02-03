@@ -6,5 +6,5 @@ Projeto em Java criado para praticar:
 - loops
 - métodos
 - organização de código
-
+- enum
 Desenvolvido durante meus estudos de programação.
