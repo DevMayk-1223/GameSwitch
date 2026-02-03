@@ -1,4 +1,3 @@
-
 import java.util.Scanner;
 
   public class GameSwitch {
@@ -23,9 +22,7 @@ import java.util.Scanner;
               }
               System.out.println("Invalido, tente novamente");
           }
-
       }
-
 
       public static void abrirHelp() {
           System.out.println("Entrando na aba de ajuda...");
@@ -42,61 +39,124 @@ import java.util.Scanner;
 
       }
 
-      public static void abrirGames(Scanner pedido) {
+      public static int lerEscolhaDoGame(Scanner pedido) {
+          int opcao;
 
-          int game;
+          while (true) {
+              System.out.println("Escolha uma opcão ");
+              opcao = pedido.nextInt();
 
-          menuGames();
+              if (opcao >= 1 && opcao <= 4) {
+                  return opcao;
 
-          game = pedido.nextInt();
-
-          if (game == 1) {
-
-              int choose;
-              int cont = 0;
-
-              System.out.println("----Bem - Vindo ao jogo, vamos iniciar :) ----");
-              System.out.println("Nós vasmos contar de 1 até o numero que você escolher");
-              System.out.println("Escolha um numero:");
-
-              choose = pedido.nextInt();
-
-              while (cont < choose) {
-                  cont++;
-                  System.out.println(cont);
               }
-
-              System.out.println("Terminamos a nossa conta, parabéns ;)");
-          } else if (game == 2) {
-
-              int choose;
-              int cont = 0;
-              int sum = 0;
-
-              System.out.println("Escolha um numero ");
-
-              choose = pedido.nextInt();
-
-              while (cont < choose) {
-                  cont++;
-                  sum = sum + cont;
-                  System.out.println(cont);
-              }
-
-              int resultado = sum;
-
-              System.out.println("Terminamos!! resultado: " + resultado);
-
-          } else if (game == 3) {
-              jogoParOuImpar(pedido);
-
-          } else if (game == 4) {
-              System.out.println("Voltando...");
-              return;
+              System.out.println("Invalido, tente novamente");
           }
       }
 
-      public static void jogoParOuImpar(Scanner pedido) {
+      public static void decisaoDoUser(Scanner pedido) {
+
+          while (true) {
+              menuGames();
+
+              int escolhaUser = lerEscolhaDoGame(pedido);
+             EstadoJogo estado = menuAbrirGames(escolhaUser, pedido);
+
+             switch (estado) {
+                 case CONTINUAR:
+                     break;
+
+                 case VOLTAR_MENU:
+                     return;
+
+                 case SAIR:
+                     exitGame();
+                     break;
+             }
+          }
+      }
+        enum EstadoJogo{
+            CONTINUAR,
+            VOLTAR_MENU,
+            SAIR
+        }
+
+        public static EstadoJogo ficarContinuarOuSair(Scanner pedido){
+            System.out.println("Qual você deseja fazer agora?");
+            System.out.println("1- Continuar");
+            System.out.println("2- Voltar ao Menu");
+            System.out.println("3- Sair");
+
+            int resposta = pedido.nextInt();
+
+            switch (resposta){
+                case 1:
+                    return EstadoJogo.CONTINUAR;
+                case 2:
+                    return EstadoJogo.VOLTAR_MENU;
+                case 3:
+                    return EstadoJogo.SAIR;
+                default:
+                    return EstadoJogo.VOLTAR_MENU;
+            }
+        }
+
+      public static EstadoJogo contadorDeNumeros(Scanner pedido) {
+
+          System.out.println("----Bem - Vindo ao jogo, vamos iniciar :) ----");
+          System.out.println("Nós vamos contar de 1 até o numero que você escolher");
+          System.out.println("Escolha um numero:");
+
+          int escolhaDoUser;
+
+          escolhaDoUser = pedido.nextInt();
+
+          for (int i = 1; i < escolhaDoUser; i++) {
+              System.out.println(i);
+          }
+            return  ficarContinuarOuSair(pedido);
+      }
+
+      public static EstadoJogo menuAbrirGames(int escolhaUser, Scanner pedido) {
+
+          switch (escolhaUser) {
+
+              case 1:
+                return contadorDeNumeros(pedido);
+              case 2:
+                 return somaDosNumeros(pedido);
+              case 3:
+                  return jogoParOuImpar(pedido);
+              case 4:
+                  return EstadoJogo.VOLTAR_MENU;
+              default:
+                  return EstadoJogo.VOLTAR_MENU;
+
+          }
+      }
+
+      public static EstadoJogo somaDosNumeros(Scanner pedido) {
+
+          System.out.println("Vamos somar numeros!!!");
+
+          int escolhaDoUser;
+          int soma = 0;
+
+          System.out.println("Escolha um numero ");
+
+          escolhaDoUser = pedido.nextInt();
+
+          for (int i = 0; i < escolhaDoUser; i++) {
+              soma +=  i;
+              System.out.println(i);
+          }
+          int resultado = soma;
+
+          System.out.println("Resultado = " + resultado);
+         return ficarContinuarOuSair(pedido);
+      }
+
+      public static EstadoJogo jogoParOuImpar(Scanner pedido) {
 
           int escolha;
 
@@ -111,6 +171,7 @@ import java.util.Scanner;
               System.out.println("O numero " + escolha + " é Impar");
           }
 
+          return ficarContinuarOuSair(pedido);
       }
 
       public static void mostrarBoasVindas() {
@@ -124,33 +185,12 @@ import java.util.Scanner;
           System.exit(0);
       }
 
-      public static void executarMenuAdmin(int opcao, Scanner pedido) {
+      public static void executarOpcao(int select, Scanner pedido) {
 
-          switch (opcao) {
-
-              case 1:
-                  System.out.println("Mostrando Usuário...");
-                  break;
-
-              case 2:
-                  System.out.println("Criando Usuário...");
-                  break;
-
-              case 3:
-                  System.out.println("Saindo do menu Admin...");
-                  break;
-
-              default:
-                  System.out.println("Esta opcão não existe :(");
-          }
-      }
-
-      public static void executarOpcao(int opcao, Scanner pedido) {
-
-          switch (opcao) {
+          switch (select) {
 
               case 1:
-                  abrirGames(pedido);
+                  decisaoDoUser(pedido);
                   break;
 
               case 2:
@@ -165,27 +205,27 @@ import java.util.Scanner;
                   exitGame();
                   break;
 
-              case 5:
-                  mostrarMenuAdmin(pedido);
-                  break;
-
               default:
                   System.out.println("Esta opcão não existe :(");
           }
       }
 
+      public static void mostrarMenuSettings(){
+          System.out.println("1- Abrir menu do admin");
+          System.out.println("2- Voltar ao menu");
+      }
+
+
       public static void abrirSettings(Scanner pedido){
 
           while(true) {
-              System.out.println("1- Abrir menu do admin");
-              System.out.println("2- Voltar ao menu");
+              mostrarMenuSettings();
 
               int escolha = lerEscolhaDoUsuario(pedido);
 
               switch (escolha) {
-
                   case 1:
-                      mostrarMenuAdmin(pedido);
+                      abrirMenuAdmin(pedido);
                       break;
 
                   case 2:
@@ -203,7 +243,7 @@ import java.util.Scanner;
           System.out.println("1- Ver Usuário");
           System.out.println("2- Criar usuário");
           System.out.println("3- Sair do menu admin");
-      }
+  }
       public static void abrirMenuAdmin(Scanner pedido){
 
           while (true){
@@ -213,10 +253,28 @@ import java.util.Scanner;
               executarMenuAdmin(escolha, pedido);
 
               if (escolha == 3){
-                  break;
+                  System.out.println("Saindo do menu admin");
+                  return;
               }
           }
       }
+
+      public static void executarMenuAdmin(int opcao, Scanner pedido) {
+          switch (opcao) {
+              case 1:
+                  System.out.println("Mostrando Usuário...");
+                  break;
+              case 2:
+                  System.out.println("Criando Usuário...");
+                  break;
+              case 3:
+                  System.out.println("Saindo do menu Admin...");
+                  break;
+              default:
+                  System.out.println("Esta opcão não existe :(");
+          }
+      }
+
       public static void main (String[] args) {
           Scanner pedido = new Scanner(System.in);
 
